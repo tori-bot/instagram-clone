@@ -19,7 +19,9 @@
   {% endblock %}
 </head>
 <body>
-    {% block content %}
+    <div class="container">
+{% block content %}
+    
     {% include 'navbar.html' %}
 
     {% block scripts %}
@@ -28,5 +30,7 @@
 
     {% endblock %}
     {% endblock %}
+    </div>
+    
 </body>
 </html>

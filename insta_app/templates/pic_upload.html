@@ -1,0 +1,12 @@
+{%  extends 'base.html' %}
+{% block content %}
+{{block.super}}
+<h1>Upload a Picture </h1>
+
+<form  action="{%url 'upload_pic'%}" method="post" enctype="multipart/form-data">
+    {%csrf_token%}
+
+    {% bootstrap_form form%}
+    <input type="submit" class="btn btn-success btn-lg" value="Post">
+  </form>
+{% endblock %}
