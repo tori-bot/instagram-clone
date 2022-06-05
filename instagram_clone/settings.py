@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'insta_app',
     'bootstrap5',
+    'bootstrapform',
     
 ]
 

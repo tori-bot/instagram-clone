@@ -25,7 +25,7 @@ def upload_pic(request):
         context={
             'upload': upload,
         }
-        return render(request,'upload.html',context)
+        return render(request,'pic_upload.html',context)
 
 def pic_update(request,picture_id):
     picture_id=int(picture_id)

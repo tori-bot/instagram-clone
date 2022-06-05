@@ -2,3 +2,13 @@
     height: 7vh;
     width: 12vw;
 }
+.bi{
+    font-size: 1rem;
+    margin-left: 1vw;
+}
+.navbar{
+    height: 7vh;
+}
+.search{
+    height: 5vh;
+}
