@@ -41,3 +41,12 @@ def pic_update(request,picture_id):
         'pic_form':pic_form,
     }
     return render(request, 'upload.html',context)
+
+def delete_pic(request,picture_id):
+    picture_id=int(picture_id)
+    try:
+        updated=Picture.objects.get(id=picture_id)
+    except Picture.DoesNotExist:
+        return redirect('home')
+    updated.delete()
+    return redirect('home')
