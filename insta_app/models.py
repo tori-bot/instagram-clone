@@ -8,7 +8,7 @@ class HashTag(models.Model):
         return self.name
 
 class Picture(models.Model):
-    name = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
     picture=models.ImageField(upload_to='pictures')
     caption=models.TextField()
     author=models.ForeignKey(User,on_delete=models.CASCADE)
