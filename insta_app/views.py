@@ -15,7 +15,7 @@ def home(request):
 def upload_pic(request):
     upload=CreatePost()
     if request.method == 'POST':
-        upload=CreatePost(request.POST,request.FILE)
+        upload=CreatePost(request.POST,request.FILES)
         if upload.is_valid():
             upload.save()
             return redirect('home')
@@ -26,3 +26,18 @@ def upload_pic(request):
             'upload': upload,
         }
         return render(request,'upload.html',context)
+
+def pic_update(request,picture_id):
+    picture_id=int(picture_id)
+    try:
+        updated=Picture.objects.get(id=picture_id)
+    except Picture.DoesNotExist:
+        return redirect('home')
+    pic_form=CreatePost(request.POST or None,instance=updated)
+    if pic_form.is_valid():
+        pic_form.save()
+        return redirect('home')
+    context={
+        'pic_form':pic_form,
+    }
+    return render(request, 'upload.html',context)
