@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 class HashTag(models.Model):
     name=models.CharField(max_length=20,blank=True,null=True)
@@ -18,6 +19,7 @@ class Picture(models.Model):
 
     def save_picture(self):
         self.save()
+
 
     def delete_picture(self):
         self.delete()
@@ -44,9 +46,12 @@ class Picture(models.Model):
 
     def __str__(self):
         self.name
+
+
 class Comment(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     content=models.TextField()
+    
     published=models.DateTimeField(auto_now_add=True)
     picture=models.ForeignKey(Picture, on_delete=models.CASCADE)
     parent_comment=models.ForeignKey('self',on_delete=models.CASCADE)
@@ -89,4 +94,17 @@ class Profile(models.Model):
     def __str__(self):
         return self.user
 
+class Like(models.Model):
+    image = models.ForeignKey(Picture, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.name
+
+class Follow(models.Model):
+    account_following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True)
+
+    def __str__(self):
+        return self.follower
 
