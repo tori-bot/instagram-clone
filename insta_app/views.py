@@ -1,15 +1,30 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from .models import Picture,Profile
-from .forms import CreatePost, ProfileForm
+from django.urls import reverse
+from .models import Picture,Profile,Comment
+from .forms import CreatePost, ProfileForm,CommentForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     message=f'Hello instagram!'
     pictures=Picture.objects.all()
+
+    current_user=request.user
+    comment_form=CommentForm()
+    if request.method == 'POST':
+        comment_form=CommentForm(request.POST,request.FILES)
+        if comment_form.is_valid():
+            content=comment_form.cleaned_data['content']
+            comment=Comment(user=current_user,content=content)
+            comment.save()
+            return redirect(reverse('home'))
+        else:
+            return HttpResponse('Please fill the form correctly.')
+
     context={
         'message':message,
         'pictures':pictures,
+        'comment_form':comment_form,
     }
     return render(request,'index.html',context)
 
@@ -85,10 +100,10 @@ def profile_form(request):
         return render(request,'profile_form.html',context)
 
 @login_required(login_url='/accounts/login/')
-def profile(request,id):
+def profile(request):
     current_user = request.user
     profile=Profile.objects.filter(id=current_user.id).first()
-    print(profile)
+    
     user_pics=Picture.objects.filter(id=current_user.id).order_by('-published')
 
     context={
@@ -97,20 +112,22 @@ def profile(request,id):
     }
     return render(request, 'profile.html', context)
 
-# @login_required(login_url='/accounts/login/')
-# def comments(request):
-#     current_user=request.user
-#     comment_form=CommentForm()
+@login_required(login_url='/accounts/login/')
+def comments(request):
+    current_user=request.user
+    comment_form=CommentForm()
+    if request.method == 'POST':
+        comment_form=CommentForm(request.POST,request.FILES)
+        if comment_form.is_valid():
+            content=comment_form.cleaned_data['content']
+            comment=Comment(user=current_user,content=content)
+            comment.save()
+            return redirect(reverse('home'))
+        else:
+            return HttpResponse('Please fill the form correctly.')
+    else:
+        context={
+            'comment_form': comment_form, 
+        }
+        return render(request,'index.html',context)
 
-
-def one_picture(request):
-    current_user = request.user
-    post=Picture.get_pic_by_id(id=current_user.id)
-    # if post.likes.filter(id=current_user.id).exists():
-    #     post.likes.remove(current_user)
-    # else:
-    #     post.likes.add(current_user)
-    context={
-        'post': post,
-    }
-    return render(request,'one_picture.html',context)

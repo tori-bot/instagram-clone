@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{%load crispy_forms_tags %} 
 {% block content %}
 {{block.super}}
 <h1>{{current_user.username}}</h1> </h1>
@@ -6,12 +7,15 @@
 
 <div class="row">
     {% for item in pictures %}
-    <div class="col-md-3">
+    <div class="col-md-8">
+
         <div class="card index">
     <div class="top">
-        <h4>{{item.title}}</h4>
+        <p>{{item.author}} </p>
+        <p><small>{{item.title}}</small> </p>
     </div>
     <img src="{{item.picture.url}}" alt="pic" class="img-responsive">
+    <br>
     <div class="foot">
 
         <a href="#" > <i class="bi bi-heart"></i></a>
@@ -20,21 +24,35 @@
 
         <a href="#"><i class="bi bi-chat"></i></a>
         <a href="#"><i class="bi bi-send"></i></a>
+        <br>
         <p>{{item.author}} </p>
         <p><small>{{item.published}}</small>  </p>
+        <hr>
+        <form  action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        
+            {{ comment_form|crispy }}
+        
+            
+            <input type="submit" class="btn btn-success" value="Post">
+          </form>
     </div>
 
     <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{item.id}} ">
-    View
+<button type="button" class="btn btn-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal{{item.id}} ">
+   view 
   </button>
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModal{{item.id}}" tabindex="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">{{item.title}}</h5>
+          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
           <div class="image">
             <img src="{{item.picture.url}}" alt="pic" class="img-responsive">
           </div>
@@ -46,17 +64,16 @@
     
             <a href="#"><i class="bi bi-chat"></i></a>
             <a href="#"><i class="bi bi-send"></i></a>
-            <p>{{item.author}} </p>
+            <p><small>{{item.author}}</small>  </p>
+            
+            <p>{{item.caption}} </p>
             <p><small>{{item.published}}</small>  </p>
         </div>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          ...
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Comment</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          
         </div>
       </div>
     </div>
