@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from .models import Picture
-from .forms import CreatePost
+from .models import Picture,Profile
+from .forms import CreatePost, ProfileForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
@@ -60,4 +60,26 @@ def delete_pic(request,picture_id):
     updated.delete()
     return redirect('home')
 
+
+@login_required(login_url='/accounts/login/')
 def profile(request):
+    current_user = request.user
+    profile_form=ProfileForm()
+    if request.method == 'POST':
+        profile_form=ProfileForm(request.POST,request.FILES)
+        if profile_form.is_valid():
+            # upload.save()
+            
+            profile_picture = profile.cleaned_data['picture']
+            bio = profile.cleaned_data['caption']
+            follow=profile.cleaned_data['slug']
+            user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio,follow=follow)
+            user_profile.save()
+            return redirect('profile')
+        else:
+            return HttpResponse('Please fill the form correctly.')
+    else:
+        context={
+            'profile_form': profile_form, 
+        }
+        return render(request,'profile_form.html',context)

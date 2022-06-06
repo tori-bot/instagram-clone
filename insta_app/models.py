@@ -76,7 +76,7 @@ class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)   
     profile_picture=models.ImageField(upload_to='profile_pictures/',null=True) 
     bio=models.TextField()
-    follow=models.OneToOneField(Follow,on_delete=CASCADE)
+    follow=models.OneToOneField(Follow,on_delete=models.CASCADE,null=True)
 
     def save_profile(self):
         self.save()
