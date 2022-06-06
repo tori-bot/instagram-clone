@@ -87,10 +87,11 @@ def profile_form(request):
 @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    
+    profile=Picture.objects.filter(id=current_user.id)
     user_pics=Picture.objects.filter(id=current_user.id).order_by('-published')
 
     context={
         'user_pics': user_pics,
+        'profile':profile,
     }
     return render(request, 'profile.html', context)

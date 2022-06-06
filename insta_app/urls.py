@@ -10,6 +10,8 @@ urlpatterns = [
     path('update/<picture_id>',views.pic_update,name='update'),
     path('delete/<picture_id>',views.delete_pic,name='delete'), 
     path('profile/',views.profile,name='profile'),
+    path('profile_form/',views.profile_form,name='profile_form'),
+
 ]
 
 
