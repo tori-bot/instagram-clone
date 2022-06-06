@@ -14,7 +14,7 @@ class Picture(models.Model):
     caption=models.TextField()
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     published=models.DateTimeField(auto_now_add=True)
-    slug=models.SlugField(max_length=100)
+    slug=models.SlugField(max_length=100,null=True)
     hashtags=models.ManyToManyField(HashTag)
 
     def save_picture(self):

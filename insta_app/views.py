@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from .models import Picture
 from .forms import CreatePost
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     message=f'Hello instagram!'
@@ -12,12 +13,20 @@ def home(request):
     }
     return render(request,'index.html',context)
 
+@login_required(login_url='/accounts/login/')
 def upload_pic(request):
+    current_user = request.user
     upload=CreatePost()
     if request.method == 'POST':
         upload=CreatePost(request.POST,request.FILES)
         if upload.is_valid():
-            upload.save()
+            # upload.save()
+            title = upload.cleaned_data['title']
+            picture = upload.cleaned_data['picture']
+            caption = upload.cleaned_data['caption']
+            slug=upload.cleaned_data['slug']
+            pic = Picture(title=title, picture=picture, caption=caption,slug=slug,author=current_user)
+            pic.save()
             return redirect('home')
         else:
             return HttpResponse('Please fill the form correctly.')

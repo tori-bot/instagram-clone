@@ -40,10 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'insta_app',
     'bootstrap5',
-    'bootstrapform',
+    "crispy_forms",
+    "crispy_bootstrap5",
+    # 'bootstrapform',
     
     
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
