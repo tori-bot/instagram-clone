@@ -2,4 +2,20 @@
 {% block content %}
 {{block.super}}
 <h1>{{message}} </h1>
+
+
+{% for item in pictures %}
+<div class="card">
+    <div class="top">
+        <h4>profile</h4>
+    </div>
+    <img src="{{item.picture.url}}" alt="pic" class="img-responsive">
+    <div class="foot">
+        <a href="#"><i class="bi bi-heart"></i></a>
+        <a href="#"><i class="bi bi-chat"></i></a>
+        <a href="#"><i class="bi bi-send"></i></a>
+    </div>
+
+</div>
+{% endfor %}
 {% endblock %}
