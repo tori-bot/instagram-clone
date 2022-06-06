@@ -62,7 +62,7 @@ def delete_pic(request,picture_id):
 
 
 @login_required(login_url='/accounts/login/')
-def profile(request):
+def profile_form(request):
     current_user = request.user
     profile_form=ProfileForm()
     if request.method == 'POST':
@@ -70,9 +70,9 @@ def profile(request):
         if profile_form.is_valid():
             # upload.save()
             
-            profile_picture = profile.cleaned_data['picture']
-            bio = profile.cleaned_data['caption']
-            follow=profile.cleaned_data['slug']
+            profile_picture = profile_form.cleaned_data['picture']
+            bio = profile_form.cleaned_data['caption']
+            follow=profile_form.cleaned_data['slug']
             user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio,follow=follow)
             user_profile.save()
             return redirect('profile')
@@ -83,3 +83,14 @@ def profile(request):
             'profile_form': profile_form, 
         }
         return render(request,'profile_form.html',context)
+
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    current_user = request.user
+    
+    user_pics=Picture.objects.filter(id=current_user.id).order_by('-published')
+
+    context={
+        'user_pics': user_pics,
+    }
+    return render(request, 'profile.html', context)
