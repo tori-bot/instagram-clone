@@ -102,7 +102,7 @@ class Like(models.Model):
         return self.user.name
 
 class Follow(models.Model):
-    account_following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True)
 
     def __str__(self):
