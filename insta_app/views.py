@@ -59,3 +59,5 @@ def delete_pic(request,picture_id):
         return redirect('home')
     updated.delete()
     return redirect('home')
+
+def profile(request):

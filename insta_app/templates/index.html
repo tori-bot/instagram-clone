@@ -3,9 +3,10 @@
 {{block.super}}
 <h1>{{message}} </h1>
 
-
-{% for item in pictures %}
-<div class="card">
+<div class="row">
+    {% for item in pictures %}
+    <div class="col-md-3">
+        <div class="card">
     <div class="top">
         <h4>profile</h4>
     </div>
@@ -17,5 +18,9 @@
     </div>
 
 </div>
+    </div>
+
 {% endfor %}
+</div>
+
 {% endblock %}

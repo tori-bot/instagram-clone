@@ -12,3 +12,7 @@ class CreatePost(forms.Form):
     #     model = Picture
     #     exclude = ('author','published','slug','hashtags')
     
+class ProfileForm(forms.Form):
+    profile_picture=forms.ImageField()
+    bio=forms.CharField(widget=forms.Textarea)
+

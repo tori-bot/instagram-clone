@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -10,7 +11,7 @@ class HashTag(models.Model):
 
 class Picture(models.Model):
     title = models.CharField(max_length=50)
-    picture=models.ImageField(upload_to='pictures')
+    picture=models.ImageField(upload_to='pictures/')
     caption=models.TextField()
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     published=models.DateTimeField(auto_now_add=True)
@@ -64,10 +65,18 @@ class Comment(models.Model):
 
     def __str__(self):
             self.content
+class Follow(models.Model):
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True)
+
+    def __str__(self):
+        return self.follower
+           
 class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)   
-    profile_picture=models.ImageField(upload_to='profile_pictures',null=True) 
+    profile_picture=models.ImageField(upload_to='profile_pictures/',null=True) 
     bio=models.TextField()
+    follow=models.OneToOneField(Follow,on_delete=CASCADE)
 
     def save_profile(self):
         self.save()
@@ -101,10 +110,5 @@ class Like(models.Model):
     def __str__(self):
         return self.user.name
 
-class Follow(models.Model):
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True)
 
-    def __str__(self):
-        return self.follower
 
