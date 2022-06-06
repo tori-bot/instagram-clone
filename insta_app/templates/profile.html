@@ -1,6 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 {{block.super}}
-<h1>{{current_user.name}} profile</h1> 
-{% for item in pictures %}
-{% endblock %}
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{profile.profile_picture.url}} " alt="profilepic">
+    </div>
+    <div class="col-md-8">
+        <h2>{{user.current_user.name}} Profile </h2>
+        
+        <p>{{profile.bio}} </p>
+        <a href="{% url 'profile_form' %} "><button>Update Profile</button> </a>
+    </div>
+</div>
+<br>
+<hr>
+<br>
+
+<div class="row">
+  {% for item in user_pics %}
+<div class="col-md-3">
+ <div class="card">
+<img src="{{item.picture.url}} " alt="pic">
+
+</div>   
+</div>
+
+{% empty %}
+<h2>No posts yet!</h2>
+{% endfor %}
+
+{% endblock %}  
+</div>

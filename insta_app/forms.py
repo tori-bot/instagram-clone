@@ -16,3 +16,10 @@ class ProfileForm(forms.Form):
     profile_picture=forms.ImageField()
     bio=forms.CharField(widget=forms.Textarea)
 
+class CommentForm(forms.Form):
+    content=forms.CharField(widget=forms.Textarea)
+    
+
+    # def __init__(self, *args, **kwargs):
+    #     super(CommentForm, self).__init__(*args, **kwargs)
+    #     self.fields['comment'].widget.attrs.update({'placeholder':'Add a comment...'})

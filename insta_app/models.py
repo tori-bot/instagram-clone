@@ -17,6 +17,7 @@ class Picture(models.Model):
     published=models.DateTimeField(auto_now_add=True)
     slug=models.SlugField(max_length=100,null=True)
     hashtags=models.ManyToManyField(HashTag)
+    likes=models.ManyToManyField(User,related_name='more_likes', null=True)
 
     def save_picture(self):
         self.save()
@@ -65,18 +66,19 @@ class Comment(models.Model):
 
     def __str__(self):
             self.content
-class Follow(models.Model):
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', null=True)
+# class Follow(models.Model):
+#     following = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+#     follower = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
-        return self.follower
+#     def __str__(self):
+#         return self.follower
            
 class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)   
     profile_picture=models.ImageField(upload_to='profile_pictures/',null=True) 
     bio=models.TextField()
-    follow=models.OneToOneField(Follow,on_delete=models.CASCADE,null=True)
+    followers=models.IntegerField(default=0)
+    
 
     def save_profile(self):
         self.save()
@@ -89,6 +91,9 @@ class Profile(models.Model):
         self.profile_picture=profile_picture
         self.bio=bio
         self.save()
+
+    def get_follows(self):
+        return self.follow.count()
 
     @classmethod
     def get_profile_by_id(cls,id):
@@ -103,12 +108,14 @@ class Profile(models.Model):
     def __str__(self):
         return self.user
 
-class Like(models.Model):
-    image = models.ForeignKey(Picture, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+# class Like(models.Model):
+#     image = models.ForeignKey(Picture, on_delete=models.CASCADE)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     value= models.IntegerField()
+#     date= models.DateTimeField(auto_now_add= True)
 
-    def __str__(self):
-        return self.user.name
+#     def __str__(self):
+#         return self.user.name
 
 
 

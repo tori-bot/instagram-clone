@@ -70,10 +70,10 @@ def profile_form(request):
         if profile_form.is_valid():
             # upload.save()
             
-            profile_picture = profile_form.cleaned_data['picture']
-            bio = profile_form.cleaned_data['caption']
-            follow=profile_form.cleaned_data['slug']
-            user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio,follow=follow)
+            profile_picture = profile_form.cleaned_data['profile_picture']
+            bio = profile_form.cleaned_data['bio']
+            
+            user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio)
             user_profile.save()
             return redirect('profile')
         else:
@@ -85,9 +85,10 @@ def profile_form(request):
         return render(request,'profile_form.html',context)
 
 @login_required(login_url='/accounts/login/')
-def profile(request):
+def profile(request,id):
     current_user = request.user
-    profile=Picture.objects.filter(id=current_user.id)
+    profile=Profile.objects.filter(id=current_user.id).first()
+    print(profile)
     user_pics=Picture.objects.filter(id=current_user.id).order_by('-published')
 
     context={
@@ -95,3 +96,21 @@ def profile(request):
         'profile':profile,
     }
     return render(request, 'profile.html', context)
+
+# @login_required(login_url='/accounts/login/')
+# def comments(request):
+#     current_user=request.user
+#     comment_form=CommentForm()
+
+
+def one_picture(request):
+    current_user = request.user
+    post=Picture.get_pic_by_id(id=current_user.id)
+    # if post.likes.filter(id=current_user.id).exists():
+    #     post.likes.remove(current_user)
+    # else:
+    #     post.likes.add(current_user)
+    context={
+        'post': post,
+    }
+    return render(request,'one_picture.html',context)

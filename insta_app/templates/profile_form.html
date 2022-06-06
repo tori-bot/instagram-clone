@@ -2,12 +2,12 @@
 {%load crispy_forms_tags %} 
 {% block content %}
 {{block.super}}
-<h1>Upload a Picture </h1>
+<h1>Update Profile</h1>
 
-<form  action="{% url '' %}" method="post" enctype="multipart/form-data">
+<form  action="{% url 'profile_form' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    {{ upload|crispy }}
+    {{ profile_form|crispy }}
 
     
     <input type="submit" class="btn btn-success btn-lg" value="Post">
