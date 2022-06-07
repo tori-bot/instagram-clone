@@ -6,14 +6,20 @@
     font-size: 1rem;
     margin-left: 1vw;
 }
-.navbar{
+nav{
     height: 7vh;
+    width: 100vw;
+    background-color: brown;
+    color: red;
 }
 .search{
     height: 5vh;
 }
 .index{
     margin-top: 5vh;
+    position: relative;
+    left: 20%;
+   
 }
 .image img{
     width: 100%;
@@ -27,13 +33,34 @@
     margin:2vh 2vw;
 }
 .foot{
-    margin-left: 2vw;
+    margin: 2vh 2vw;
 }
 button{
     border-radius: 5px;
     border: 1px solid black;
     border: 1rem;
+    margin-bottom: 3vh;
 }
-.btn{
-    background-color: rgb(233, 30, 99,0.7);
+
+.container{
+    
+    width: 90%;
+    position: absolute;
+    left: 8%;
+}
+i:hover{
+    color: green;
+}
+.footer{
+    text-align: center;
+    color: grey;
+    margin: 0 5vh;
+}
+#search{
+    background-color: transparent;
+    border: none;
+    color: black;
+}
+#search:hover{
+    color: green;
 }

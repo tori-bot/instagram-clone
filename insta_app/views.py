@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     message=f'Hello instagram!'
-    pictures=Picture.objects.all()
+    pictures=Picture.objects.all().order_by('-published')
     comments=Comment.objects.filter()
 
     # current_user=request.user

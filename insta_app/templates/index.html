@@ -26,6 +26,7 @@
         <a href="#"><i class="bi bi-send"></i></a>
         <br>
         <p>{{item.author}} </p>
+        <p>{{item.caption}} </p>
         <p><small>{{item.published}}</small>  </p>
         <hr>
         <form  action="{% url 'home' %}" method="post" enctype="multipart/form-data">
@@ -39,8 +40,8 @@
     </div>
 
     <!-- Button trigger modal -->
-<button type="button" class="btn btn-transparent" data-bs-toggle="modal" data-bs-target="#exampleModal{{item.id}} ">
-   view 
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{item.id}} ">
+  View
   </button>
   
   <!-- Modal -->

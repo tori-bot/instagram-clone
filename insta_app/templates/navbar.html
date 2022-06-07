@@ -4,7 +4,7 @@
       </a>
       <form class="d-flex search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+          <button id="search" class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
         </form>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -38,8 +38,8 @@
               <li><a class="dropdown-item" href="{% url 'profile' %} ">Profile</a></li>
               <li><a class="dropdown-item" href="#">Settings</a></li>
               
-              <li><a class="dropdown-item" href="registration/login.html">Switch Account</a></li><hr>
-              <li><a class="dropdown-item" href="/#">Logout</a></li>
+              <li><a class="dropdown-item" href="{% url 'django_registration_register' %} ">Switch Account</a></li><hr>
+              <li><a class="dropdown-item" href="{% url 'logout' %} ">Logout</a></li>
             </ul>
           </div>
         </ul>
