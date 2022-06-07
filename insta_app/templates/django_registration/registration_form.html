@@ -4,7 +4,9 @@
 <div class="container">
   <div class="row">
     <!-- Empty div -->
-    <div class="col-md-4"></div>
+    <div class="col-md-7">
+      <img src="https://images.unsplash.com/photo-1611162618758-2a29a995354b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGluc3RhZ3JhbXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="">
+    </div>
     <div class="col-md-4">
       {% if form.errors %}
         <p> Some Information Might be Incorrect </p>
@@ -20,12 +22,15 @@
             {% csrf_token %}
             {% bootstrap_form form %}
             <div class="form-group">
-              <input type="submit" class="btn btn-primary btn-sm" value="Sign Up">
+              <input type="submit" class="btn  btn-sm" value="Sign Up">
             </div>
 
             <input type="hidden" name="next" value="{{next}}">
 
           </form>
+          <br>
+          <a href="#">Already have an account.</a>
+          
 
         </div>
 
@@ -33,7 +38,7 @@
 
     </div>
     <!-- empty div -->
-    <div class="col-md-4"></div>
+    <div class="col-md-1"></div>
   </div>
 </div>
 

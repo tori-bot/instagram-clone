@@ -34,3 +34,6 @@ button{
     border: 1px solid black;
     border: 1rem;
 }
+.btn{
+    background-color: rgb(233, 30, 99,0.7);
+}
