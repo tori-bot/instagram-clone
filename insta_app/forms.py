@@ -17,7 +17,7 @@ class ProfileForm(forms.Form):
     bio=forms.CharField(widget=forms.Textarea)
 
 class CommentForm(forms.Form):
-    content=forms.CharField(max_length=5000)
+    comment=forms.CharField(max_length=5000)
     
 
     # def __init__(self, *args, **kwargs):

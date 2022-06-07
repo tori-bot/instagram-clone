@@ -55,8 +55,8 @@ class Comment(models.Model):
     content=models.TextField()
     
     published=models.DateTimeField(auto_now_add=True)
-    picture=models.ForeignKey(Picture, on_delete=models.CASCADE)
-    parent_comment=models.ForeignKey('self',on_delete=models.CASCADE)
+    picture=models.ForeignKey(Picture, on_delete=models.CASCADE,null=True)
+    parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
 
     def save_comment(self):
         self.save()

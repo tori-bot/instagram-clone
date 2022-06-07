@@ -29,3 +29,8 @@
 .foot{
     margin-left: 2vw;
 }
+button{
+    border-radius: 5px;
+    border: 1px solid black;
+    border: 1rem;
+}

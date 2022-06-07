@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.urls import reverse
+
+from insta_app.admin import PictureAdmin
 from .models import Picture,Profile,Comment
 from .forms import CreatePost, ProfileForm,CommentForm
 from django.contrib.auth.decorators import login_required
@@ -8,15 +10,16 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     message=f'Hello instagram!'
     pictures=Picture.objects.all()
+    comments=Comment.objects.filter()
 
-    current_user=request.user
+    # current_user=request.user
     comment_form=CommentForm()
     if request.method == 'POST':
         comment_form=CommentForm(request.POST,request.FILES)
         if comment_form.is_valid():
-            content=comment_form.cleaned_data['content']
-            comment=Comment(user=current_user,content=content)
-            comment.save()
+            comment=comment_form.cleaned_data['comment']
+            single_post = Picture.objects.filter()
+            comment = Comment.objects.create( user=request.user, comment=comment)
             return redirect(reverse('home'))
         else:
             return HttpResponse('Please fill the form correctly.')
@@ -25,6 +28,7 @@ def home(request):
         'message':message,
         'pictures':pictures,
         'comment_form':comment_form,
+        'comments':comments,
     }
     return render(request,'index.html',context)
 
@@ -102,7 +106,7 @@ def profile_form(request):
 @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    profile=Profile.objects.filter(id=current_user.id).first()
+    profile=Profile.objects.filter(id=current_user.id)
     
     user_pics=Picture.objects.filter(id=current_user.id).order_by('-published')
 
@@ -111,23 +115,4 @@ def profile(request):
         'profile':profile,
     }
     return render(request, 'profile.html', context)
-
-@login_required(login_url='/accounts/login/')
-def comments(request):
-    current_user=request.user
-    comment_form=CommentForm()
-    if request.method == 'POST':
-        comment_form=CommentForm(request.POST,request.FILES)
-        if comment_form.is_valid():
-            content=comment_form.cleaned_data['content']
-            comment=Comment(user=current_user,content=content)
-            comment.save()
-            return redirect(reverse('home'))
-        else:
-            return HttpResponse('Please fill the form correctly.')
-    else:
-        context={
-            'comment_form': comment_form, 
-        }
-        return render(request,'index.html',context)
 
