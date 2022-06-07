@@ -41,7 +41,10 @@ button{
     border: 1rem;
     margin-bottom: 3vh;
 }
-
+.error{
+    color: red;
+    margin-top: 15vh;
+}
 .container{
     
     width: 90%;

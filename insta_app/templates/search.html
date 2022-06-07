@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{block.super}}
+<div class="container">
+    <div class="row">
+        {% if searched_images %}
+        <h2>Found {{ searched_images|length }} items for searched category {{message}}</h2>
+        {% else %}
+        <div class="row">
+            <div class="col-md-3">
+                <h3 class="error">Try again...</h3>
+            </div>
+            <div class="col-md-9">
+             <img src="https://media.istockphoto.com/photos/sad-vintage-robot-picture-id178609609?b=1&k=20&m=178609609&s=170667a&w=0&h=QDh5W52dPoP0plIO5enYqFG6fFis9_-0cd-NjrbAJwU=" alt="sad">   
+            </div>
+        </div>
+        
+        {% endif %}
+    </div>
+    
+        {% if searched_images %}
+        
+        <div class="row">
+            {% for item in searched_images %}
+            <div class="col-md-4">
+            <div class="card">
+    <!-- Button trigger modal -->
+    <img src="{{item.image.url}}" class="img-responsive card-img-top" alt="Image">
+    <h3>{{item.image_name}}</h3>
+    <h5>{{item.published | timesince}} ago</h5>
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{item.id}}">
+    <i class="bi bi-info-square-fill"></i>
+    </button>
+    
+    <!-- Modal -->
+    
+    </div>
+            </div>
+          
+          <div class="modal fade" id="exampleModal{{item.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button   class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <img src="{{item.image.url}}" class="img-responsive card-img-top" alt="Image">
+    
+           
+    
+        
+        </div>
+        <div class="modal-body">
+            <h3>{{item.image_name}}</h3>
+    
+        <h5>Category ~ <span class="two" >{{item.image_category}}</span></h5>
+         <p>{{item.image_description}} </p>
+        <h3 class="modal-title" id="exampleModalLabel">{{item.image_location}}
+       <h5>{{item.published | timesince}} ago</h5>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="share" ><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Share</button></a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+        </div>
+    </div>
+    </div>
+    </div>      
+            
+            {% empty %}
+          <h4>You don't have any images yet</h4>
+            {% endfor %}
+        
+        
+            
+        </div>
+
+        {% endif %} 
+      
+    </div>
+
+{% endblock %}

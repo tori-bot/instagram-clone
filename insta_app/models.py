@@ -42,9 +42,9 @@ class Picture(models.Model):
         return picture
 
     @classmethod
-    def search_picture(cls,search_term):
-        pictures=cls.objects.filter(hashtags__name__icontains=search_term) 
-        return pictures
+    def search_image(cls,search_term):
+        images=cls.objects.filter(title__icontains=search_term) 
+        return images
 
     def __str__(self):
         self.name

@@ -116,3 +116,20 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
+def search(request):
+    if 'picture' in request.GET and request.GET['picture']:
+        #check if the image query exists in our request.GET object and then we then check if it has a value
+    
+        # search_term=request.GET.get('image')
+        # images=Image.search_image(search_term)
+        # message=f'(search_term)'
+        # return render(request,'search.html',{'images':images,'message':message})
+
+        search_term = request.GET['picture']
+        searched_images=Picture.search_image(search_term)
+        
+        message=f'{search_term} '
+        return render(request,'search.html',{'searched_images':searched_images,'message':message})
+    else:
+        message='Try searching for something'
+        return render(request,'search.html',{'message':message})
