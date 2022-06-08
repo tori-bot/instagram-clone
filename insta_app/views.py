@@ -97,15 +97,20 @@ def profile_form(request):
     current_user = request.user
     profile_form=ProfileForm()
     if request.method == 'POST':
-        profile_form=ProfileForm(request.POST,request.FILES)
-        if profile_form.is_valid():
-            # upload.save()
+         user_form = UpdateUserForm(request.POST, instance=request.user)
+        prof_form = UpdateUserProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and prof_form.is_valid():
+            user_form.save()
+            prof_form.save()
+        # profile_form=ProfileForm(request.POST,request.FILES)
+        # if profile_form.is_valid():
+        #     # upload.save()
             
-            profile_picture = profile_form.cleaned_data['profile_picture']
-            bio = profile_form.cleaned_data['bio']
+        #     profile_picture = profile_form.cleaned_data['profile_picture']
+        #     bio = profile_form.cleaned_data['bio']
             
-            user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio)
-            user_profile.save()
+        #     user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio)
+        #     user_profile.save()
             return redirect('profile')
         else:
             return HttpResponse('Please fill the form correctly.')

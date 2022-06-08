@@ -18,8 +18,8 @@ class Picture(models.Model):
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     published=models.DateTimeField(auto_now_add=True)
     slug=models.SlugField(max_length=100,null=True)
-    hashtags=models.ManyToManyField(HashTag)
-    likes=models.ManyToManyField(User,related_name='more_likes', null=True)
+    # hashtags=models.ManyToManyField(HashTag)
+    
 
     def save_picture(self):
         self.save()
@@ -53,27 +53,20 @@ class Picture(models.Model):
 
 
 
-# class Follow(models.Model):
-#     following = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-#     follower = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-#     def __str__(self):
-#         return self.follower
            
 class Profile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)   
+    user_id=models.OneToOneField(User,on_delete=models.CASCADE)   
     profile_picture=models.ImageField(upload_to='profile_pictures/',null=True) 
     bio=models.TextField(default='My Bio', blank=True)
     # followers=models.IntegerField(default=0,null=True)
-    
-
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(self, sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
+    def save_user_profile(self,sender, instance, **kwargs):
         instance.profile.save()
 
     def save_profile(self):
@@ -105,11 +98,10 @@ class Profile(models.Model):
         return f'{self.user.username}'
 
 class Comment(models.Model):
-    user=models.ForeignKey(Profile,on_delete=models.CASCADE)
+    commentor=models.ForeignKey(Profile,on_delete=models.CASCADE, null=True,related_name='commentor')
     comment=models.TextField()
-    
     published=models.DateTimeField(auto_now_add=True)
-    picture=models.ForeignKey(Picture, on_delete=models.CASCADE,null=True)
+    picture=models.ForeignKey(Picture, on_delete=models.CASCADE, related_name='comments',null=True)
     # parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
 
     def save_comment(self):
@@ -124,7 +116,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.user.name}'
-        
+
 # class Like(models.Model):
 #     image = models.ForeignKey(Picture, on_delete=models.CASCADE)
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -134,5 +126,10 @@ class Comment(models.Model):
 #     def __str__(self):
 #         return self.user.name
 
+class Follow(models.Model):
+    followers = models.ForeignKey(Profile,on_delete=models.CASCADE, related_name='following')
+    following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers')
 
+    def __str__(self):
+        return f'{self.followers}'
 
