@@ -9,19 +9,26 @@ from .forms import CreatePost, ProfileForm,CommentForm,SignUpForm, UpdateUserFor
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-def home(request):
+def home(request,id):
     message=f'Hello instagram!'
     pictures=Picture.objects.all().order_by('-published')
-    comments=Comment.objects.filter()
+    users = User.objects.exclude(id=request.user.id)
+    # comments=Comment.objects.filter()
 
-    # current_user=request.user
+    
+    image = get_object_or_404(Comment, pk=id)
+    is_liked = False
+    if image.likes.filter(id=request.user.id).exists():
+        is_liked = True
+
     comment_form=CommentForm()
     if request.method == 'POST':
         comment_form=CommentForm(request.POST,request.FILES)
         if comment_form.is_valid():
-            comment=comment_form.cleaned_data['comment']
-            single_post = Picture.objects.filter()
-            comment = Comment.objects.create( user=request.user, comment=comment)
+            savecomment = comment_form.save(commit=False)
+            savecomment.post = image
+            savecomment.user = request.user.profile
+            savecomment.save()
             return redirect(reverse('home'))
         else:
             return HttpResponse('Please fill the form correctly.')
@@ -29,8 +36,11 @@ def home(request):
     context={
         'message':message,
         'pictures':pictures,
+        'users':users,
         'comment_form':comment_form,
-        'comments':comments,
+        # 'comments':comments,
+        'is_liked': is_liked,
+        'total_likes': image.total_likes()
     }
     return render(request,'index.html',context)
 
