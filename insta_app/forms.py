@@ -1,5 +1,7 @@
 from django import forms
 from .models import Picture,Profile
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class CreatePost(forms.Form):
@@ -11,8 +13,21 @@ class CreatePost(forms.Form):
     # class Meta:
     #     model = Picture
     #     exclude = ('author','published','slug','hashtags')
-    
-class ProfileForm(forms.Form):
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(max_length=200, help_text='Please input a valid email address.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password') 
+
+class UpdateUserForm(forms.ModelForm):
+    email = forms.EmailField(max_length=200, help_text='Please input a valid email address.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')  
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields='__all__'
