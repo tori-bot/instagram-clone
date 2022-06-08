@@ -16,14 +16,12 @@ class CreatePost(forms.Form):
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Please input a valid email address.')
-
     class Meta:
         model = User
         fields = ('username', 'email', 'password') 
 
 class UpdateUserForm(forms.ModelForm):
     email = forms.EmailField(max_length=200, help_text='Please input a valid email address.')
-
     class Meta:
         model = User
         fields = ('username', 'email')  
