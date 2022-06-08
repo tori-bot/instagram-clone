@@ -52,22 +52,7 @@ class Picture(models.Model):
         self.name
 
 
-class Comment(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    content=models.TextField()
-    
-    published=models.DateTimeField(auto_now_add=True)
-    picture=models.ForeignKey(Picture, on_delete=models.CASCADE,null=True)
-    parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
 
-    def save_comment(self):
-        self.save()
-
-    def delete_comment(self):
-        self.delete()
-
-    def __str__(self):
-            self.content
 # class Follow(models.Model):
 #     following = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 #     follower = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -119,6 +104,27 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username}'
 
+class Comment(models.Model):
+    user=models.ForeignKey(Profile,on_delete=models.CASCADE)
+    comment=models.TextField()
+    
+    published=models.DateTimeField(auto_now_add=True)
+    picture=models.ForeignKey(Picture, on_delete=models.CASCADE,null=True)
+    # parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
+
+    def save_comment(self):
+        self.save()
+
+    def delete_comment(self):
+        self.delete()
+
+    class Meta:
+        ordering = ["-published"]
+
+
+    def __str__(self):
+        return f'{self.user.name}'
+        
 # class Like(models.Model):
 #     image = models.ForeignKey(Picture, on_delete=models.CASCADE)
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
