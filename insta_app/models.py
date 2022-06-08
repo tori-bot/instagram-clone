@@ -1,6 +1,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class HashTag(models.Model):
@@ -76,9 +78,18 @@ class Comment(models.Model):
 class Profile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)   
     profile_picture=models.ImageField(upload_to='profile_pictures/',null=True) 
-    bio=models.TextField()
-    followers=models.IntegerField(default=0,null=True)
+    bio=models.TextField(default='My Bio', blank=True)
+    # followers=models.IntegerField(default=0,null=True)
     
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
 
     def save_profile(self):
         self.save()
@@ -92,21 +103,21 @@ class Profile(models.Model):
         self.bio=bio
         self.save()
 
-    def get_follows(self):
-        return self.follow.count()
+    # def get_follows(self):
+    #     return self.follow.count()
 
-    @classmethod
-    def get_profile_by_id(cls,id):
-        profile=cls.objects.get(id=id)
-        return profile
+    # @classmethod
+    # def get_profile_by_id(cls,id):
+    #     profile=cls.objects.get(id=id)
+    #     return profile
 
     @classmethod
     def search_profile(cls,search_term):
-        profile=cls.objects.filter(user__name__icontains=search_term) 
+        profile=cls.objects.filter(user__username__icontains=search_term) 
         return profile
 
     def __str__(self):
-        return self.user
+        return f'{self.user.username}'
 
 # class Like(models.Model):
 #     image = models.ForeignKey(Picture, on_delete=models.CASCADE)

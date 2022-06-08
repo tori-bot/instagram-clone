@@ -1,5 +1,5 @@
 from django import forms
-from .models import Picture
+from .models import Picture,Profile
 
 
 class CreatePost(forms.Form):
@@ -13,8 +13,13 @@ class CreatePost(forms.Form):
     #     exclude = ('author','published','slug','hashtags')
     
 class ProfileForm(forms.Form):
-    profile_picture=forms.ImageField()
-    bio=forms.CharField(widget=forms.Textarea)
+    class Meta:
+        model = Profile
+        fields='__all__'
+    # profile_picture=forms.ImageField()
+    # bio=forms.CharField(widget=forms.Textarea)
+
+
 
 class CommentForm(forms.Form):
     comment=forms.CharField(max_length=5000)

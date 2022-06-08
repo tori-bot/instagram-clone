@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.urls import reverse
 
+from django.contrib.auth.models import User
 from insta_app.admin import PictureAdmin
 from .models import Picture,Profile,Comment
 from .forms import CreatePost, ProfileForm,CommentForm
@@ -107,11 +108,13 @@ def profile_form(request):
 def profile(request):
     current_user = request.user
     profile=Profile.objects.filter(id=current_user.id)
+    user = User.objects.get(username=current_user.username)
     
     user_pics=Picture.objects.filter(id=current_user.id).order_by('-published')
 
     context={
         'user_pics': user_pics,
+        'user':user,
         'profile':profile,
     }
     return render(request, 'profile.html', context)
