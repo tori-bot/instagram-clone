@@ -146,7 +146,7 @@ def user_profile(request,username):
     user=User.objects.get(username=current_user.username)
     selected=User.objects.get(username=username)
     if selected==user:
-        return redirect('profile',username=current_user.username)
+        return redirect('index',username=current_user.username)
 
     pictures=Picture.objects.filter(user=selected.id)
     follows=Follow.objects.filter(follower_id=selected.id)

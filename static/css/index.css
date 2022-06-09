@@ -73,3 +73,12 @@ i:hover{
     object-fit: cover;
     border-radius: 50%;
 }
+.tiny-pic{
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.suggest{
+    position: fixed;
+}

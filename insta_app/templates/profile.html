@@ -9,6 +9,8 @@
     </div>
     <div class="col-md-8">
         <h2>{{user.username}} Profile </h2>
+        <p>{{user_pics.count}}  posts  ~  {{user.followers.count}}  followers  ~  {{user.following.count}}  following</p>
+        
         
         <p>{{profile.bio}} </p>
         <a href="{% url 'profile_form' user.id %} "><button>Update Profile</button> </a>
