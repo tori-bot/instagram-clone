@@ -16,13 +16,10 @@ class Picture(models.Model):
     caption=models.TextField()
     author=models.ForeignKey(User,on_delete=models.CASCADE)
     published=models.DateTimeField(auto_now_add=True)
-   
     hashtags=models.ManyToManyField(HashTag)
-    # likes=models.ManyToManyField(User,related_name='more_likes', null=True)
-
+    
     def save_picture(self):
         self.save()
-
 
     def delete_picture(self):
         self.delete()
@@ -33,7 +30,6 @@ class Picture(models.Model):
         self.caption=caption
         self.author=author
         self.published=published
-        
         self.hashtag=hashtag
         self.save()
 
@@ -54,7 +50,6 @@ class Picture(models.Model):
 class Comment(models.Model):
     user=models.ForeignKey(User,null=True,on_delete=models.CASCADE)
     content=models.TextField()
-    
     published=models.DateTimeField(auto_now_add=True)
     picture=models.ForeignKey(Picture, on_delete=models.CASCADE,default=0)
     parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
@@ -67,12 +62,13 @@ class Comment(models.Model):
 
     def __str__(self):
             self.content
-# class Follow(models.Model):
-#     following = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-#     follower = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-#     def __str__(self):
-#         return self.follower
+class Follow(models.Model):
+    following = models.ForeignKey(User, on_delete=models.CASCADE, null=True,related_name='following')
+    followed = models.ForeignKey(User, on_delete=models.CASCADE, null=True,related_name='followers')
+
+    def __str__(self):
+        return self.follower
            
 class Profile(models.Model):
     user=models.OneToOneField(User,primary_key=True,on_delete=models.CASCADE)   
