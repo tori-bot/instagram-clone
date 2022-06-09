@@ -24,11 +24,16 @@
     </div>
 </div>
 <br>
+<div class="counts">
+    <p>{{posts.count}} posts </p>
+    <p>{{selected.followers.count}} followers </p>
+    <p>{{selected.following.count}} following </p>
+</div>
 <hr>
 <br>
 
 <div class="row">
-  {% for item in user_pics %}
+  {% for item in pictures %}
 <div class="col-md-3">
  <div class="card">
 <img src="{{item.picture.url}} " alt="pic">

@@ -166,3 +166,17 @@ def user_profile(request,username):
         'profile':profile,
     }
     return render(request,'user_profile.html',context)
+
+def follow(request,id):
+    if request.method == 'GET':
+        follow=User.objects.get(pk=id)
+        follow_user=Follow(follower=request.user, followed=follow)
+        follow_user.save()
+        return redirect('user_profile' ,username=follow.username)
+    
+def unfollow(request,id):
+    if request.method=='GET':
+        unfollow=User.objects.get(pk=id)
+        unfollow_user=Follow.objects.filter(follower=request.user,followed=unfollow)
+        unfollow_user.delete()
+        return redirect('user_profile' ,username=unfollow.username)
