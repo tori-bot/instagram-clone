@@ -15,8 +15,9 @@ urlpatterns = [
     path('search/',views.search,name='search'),
     path('follow/<int:id>/',views.follow, name='follow'),
     path('unfollow/<int:id>/',views.unfollow, name='unfollow'),
-    # path('like/',name='like'),
-    # path('comment/',views.comment,name='comment'),
+    path('add_comment/<int:post_id>/',views.comment, name='add_comment'),
+    path('like_post/<int:post_id>/',views.like, name='like_post'),
+
 
 ]
 

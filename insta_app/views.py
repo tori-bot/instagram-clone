@@ -8,19 +8,35 @@ from django.contrib.auth.models import User
 from .forms import CreatePost, ProfileForm,CommentForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-def home(request):
+def home(request,post_id):
     message=f'Hello instagram!'
     pictures=Picture.objects.all().order_by('-published')
-    comments=Comment.objects.filter()
+    
 
-    # current_user=request.user
+    current_user=request.user
     comment_form=CommentForm()
     if request.method == 'POST':
+
+    #     comment=request.POST.get('comment')
+    # picture=Picture.objects.get(id=pic_id)
+    # user_profile=User.objects.get(username=current_user.username)
+    # Comment.objects.create(comment=comment,
+    #      picture=picture,
+    #      user=user_profile )
+    # return redirect('view_post' ,pk=pic_id)
+
         comment_form=CommentForm(request.POST,request.FILES)
         if comment_form.is_valid():
-            comment=comment_form.cleaned_data['comment']
-            single_post = Picture.objects.filter()
-            comment = Comment.objects.create( user=request.user, comment=comment)
+            # comment=comment_form.cleaned_data['comment']
+            single_post = Picture.objects.get(id=post_id)
+            # comment = Comment.objects.create( user=request.user, comment=comment)
+            comment= request.POST.get('comment')
+            user_profile = User.objects.get(username=current_user.username)
+            Comment.objects.create(
+            comment=comment,
+            picture = single_post,
+            user=user_profile   
+            )
             return redirect(reverse('home'))
         else:
             return HttpResponse('Please fill the form correctly.')
@@ -185,3 +201,19 @@ def unfollow(request,id):
         unfollow_user=Follow.objects.filter(follower=request.user,followed=unfollow)
         unfollow_user.delete()
         return redirect('user_profile' ,username=unfollow.username)
+
+@login_required(login_url='/accounts/login/')
+def comment(request,pic_id):
+    current_user = request.user
+    if request.method == 'POST':
+        comment= request.POST.get('comment')
+    post = Picture.objects.get(id=pic_id)
+    user_profile = User.objects.get(username=current_user.username)
+    Comment.objects.create(
+         comment=comment,
+         post = post,
+         user=user_profile   
+        )
+    return redirect('view_post' ,pk=pic_id)
+
+def like(request,pic_id):
