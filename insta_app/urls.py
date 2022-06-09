@@ -8,10 +8,13 @@ urlpatterns = [
     path('',views.home,name='home'),
     path('upload/',views.upload_pic,name='upload_pic'),
     path('update/<picture_id>',views.pic_update,name='update'),
+
     path('delete/<picture_id>',views.delete_pic,name='delete'), 
     path('profile/',views.profile,name='profile'),
-    path('profile_form/',views.profile_form,name='profile_form'),
+    path('profile_form/<int:id>/',views.profile_form,name='profile_form'),
     path('search/',views.search,name='search'),
+    path('follow/<int:id>/',views.follow, name='follow'),
+    path('unfollow/<int:id>/',views.unfollow, name='unfollow'),
     # path('like/',name='like'),
     # path('comment/',views.comment,name='comment'),
 

@@ -67,3 +67,9 @@ i:hover{
 #search:hover{
     color: green;
 }
+.profilepic{
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+}

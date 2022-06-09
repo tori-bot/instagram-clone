@@ -3,13 +3,15 @@
 {{block.super}}
 <div class="row">
     <div class="col-md-4">
-        <img src="{{profile.profile_picture.url}} " alt="profilepic">
+        {% if profile.profile_picture %}
+        <img class="profilepic" src="{{profile.profile_picture.url}} " alt="profilepic">
+        {% endif %}
     </div>
     <div class="col-md-8">
-        <h2>{{user.current_user.name}} Profile </h2>
+        <h2>{{user.username}} Profile </h2>
         
         <p>{{profile.bio}} </p>
-        <a href="{% url 'profile_form' %} "><button>Update Profile</button> </a>
+        <a href="{% url 'profile_form' user.id %} "><button>Update Profile</button> </a>
     </div>
 </div>
 <br>

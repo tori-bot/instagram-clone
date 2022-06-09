@@ -81,20 +81,22 @@ def delete_pic(request,picture_id):
     return redirect('home')
 
 
-@login_required(login_url='/accounts/login/')
-def profile_form(request):
+# @login_required(login_url='/accounts/login/')
+def profile_form(request,id):
     current_user = request.user
+    user = User.objects.get(id=id)
+    profile = Profile.objects.get(user = user)
     profile_form=ProfileForm()
     if request.method == 'POST':
-        profile_form=ProfileForm(request.POST,request.FILES)
+        profile_form=ProfileForm(request.POST,request.FILES,instance=profile)
         if profile_form.is_valid():
-            # upload.save()
+            profile_form.save()
             
-            profile_picture = profile_form.cleaned_data['profile_picture']
-            bio = profile_form.cleaned_data['bio']
+            # profile_picture = profile_form.cleaned_data['profile_picture']
+            # bio = profile_form.cleaned_data['bio']
             
-            user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio)
-            user_profile.save()
+            # user_profile = Profile(user=current_user, profile_picture=profile_picture, bio=bio)
+            # user_profile.save()
             return redirect('profile')
         else:
             return HttpResponse('Please fill the form correctly.')
@@ -104,17 +106,20 @@ def profile_form(request):
         }
         return render(request,'profile_form.html',context)
 
-@login_required(login_url='/accounts/login/')
+# @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    user=User.objects.get(id=current_user)
-    # profile=Profile.objects.filter(id=current_user.id)
+    user=User.objects.get(id=current_user.id)
+    profile=Profile.get_profile_by_id(user.id)
+    follow = Follow.objects.filter(following_id = user.id)
+    user_pics=Picture.objects.filter(author=user.id).order_by('-published')
     
-    user_pics=Picture.objects.filter(user=user.id).order_by('-published')
 
     context={
         'user_pics': user_pics,
         'profile':profile,
+        'follow':follow,
+        'user': user,
     }
     return render(request, 'profile.html', context)
 
