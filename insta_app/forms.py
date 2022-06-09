@@ -10,7 +10,7 @@ class CreatePost(forms.Form):
 
     # class Meta:
     #     model = Picture
-    #     exclude = ('author','published','slug','hashtags')
+    #     exclude = ('author','published','hashtags')
     
 class ProfileForm(forms.Form):
     profile_picture=forms.ImageField()

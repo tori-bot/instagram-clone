@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{{block.super}}
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{profile.profile_picture.url}} " alt="profilepic">
+    </div>
+    <div class="col-md-8">
+        <h2>{{selected.username}} Profile </h2>
+
+        {% if status %}
+        <div>
+          <a href="{%url 'unfollow' selected.id %}" class="btn btn-primary">Following</a>
+        </div>
+        {%else%}
+        <div>
+          <a href="{%url 'follow' selected.id %}" class="btn btn-outline-primary">Follow</a>
+        </div>
+        {% endif %}
+
+        <h4>BIO</h4>
+        <p>{{profile.bio}} </p>
+        
+    </div>
+</div>
+<br>
+<hr>
+<br>
+
+<div class="row">
+  {% for item in user_pics %}
+<div class="col-md-3">
+ <div class="card">
+<img src="{{item.picture.url}} " alt="pic">
+
+</div>   
+</div>
+
+{% empty %}
+<h2>No posts yet!</h2>
+{% endfor %}
+
+{% endblock %}  
+</div>

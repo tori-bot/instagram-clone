@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 
 from insta_app.admin import PictureAdmin
-from .models import Picture,Profile,Comment
+from .models import Picture,Profile,Comment,Follow
 from django.contrib.auth.models import User
 from .forms import CreatePost, ProfileForm,CommentForm
 from django.contrib.auth.decorators import login_required
@@ -40,6 +40,7 @@ def upload_pic(request):
     if request.method == 'POST':
         upload=CreatePost(request.POST,request.FILES)
         if upload.is_valid():
+            # upload.instance.user=current_user
             # upload.save()
             title = upload.cleaned_data['title']
             picture = upload.cleaned_data['picture']
@@ -106,7 +107,7 @@ def profile_form(request):
 @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    user=User.projects.get(id=current_user)
+    user=User.objects.get(id=current_user)
     # profile=Profile.objects.filter(id=current_user.id)
     
     user_pics=Picture.objects.filter(user=user.id).order_by('-published')
