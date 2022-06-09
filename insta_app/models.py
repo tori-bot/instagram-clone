@@ -107,10 +107,4 @@ class Profile(models.Model):
     def __str__(self):
         return self.user
 
-class Follow(models.Model):
-    follower = models.ForeignKey(User,on_delete=models.CASCADE, related_name='following', null=True)
-    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers', null=True)
-
-    def __str__(self):
-        return f'{self.followers} Follow'
 
