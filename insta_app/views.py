@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.urls import reverse
-
+from django.http import HttpResponseRedirect
+from django.http.response import Http404
 from insta_app.admin import PictureAdmin
 from .models import Picture,Profile,Comment,Follow
 from django.contrib.auth.models import User
@@ -139,24 +140,20 @@ def profile(request):
     }
     return render(request, 'profile.html', context)
 
+@login_required
 def search(request):
-    if 'picture' in request.GET and request.GET['picture']:
-        #check if the image query exists in our request.GET object and then we then check if it has a value
-    
-        # search_term=request.GET.get('image')
-        # images=Image.search_image(search_term)
-        # message=f'(search_term)'
-        # return render(request,'search.html',{'images':images,'message':message})
-
-        search_term = request.GET['picture']
-        searched_images=Picture.search_image(search_term)
-        
-        message=f'{search_term} '
-        return render(request,'search.html',{'searched_images':searched_images,'message':message})
+    if 'search_profile' in request.GET and request.GET["search_profile"]:
+        search_term = request.GET.get("search_profile")
+        searched_profiles = Profile.search_profile(search_term)
+        print(searched_profiles)
+        message = f"{search_term}"
+        return render(request, 'instagram/search_results.html', {"message":message,"profiles": searched_profiles})
     else:
-        message='Try searching for something'
-        return render(request,'search.html',{'message':message})
+        message = "Take the chance to search for a profile"
 
+    return render(request, 'search_results.html', {'message': message})
+
+    
 def user_profile(request,username):
     current_user=request.user
     user=User.objects.get(username=current_user.username)
@@ -217,3 +214,19 @@ def comment(request,pic_id):
     return redirect('view_post' ,pk=pic_id)
 
 def like(request,pic_id):
+    post = Picture.objects.get(pk=pic_id)
+    is_liked = False
+    user=request.user.profile
+    try:
+        profile=Profile.objects.get(user=user.user)
+        print(profile)
+
+    except Profile.DoesNotExist:
+        raise Http404()
+    if post.likes.filter(id=user.user.id).exists():
+        post.likes.remove(user.user)
+        is_liked=False
+    else:
+        post.likes.add(user.user)
+        is_liked=True
+    return HttpResponseRedirect(reverse('home'))

@@ -12,11 +12,11 @@ urlpatterns = [
     path('delete/<picture_id>',views.delete_pic,name='delete'), 
     path('profile/',views.profile,name='profile'),
     path('profile_form/<int:id>/',views.profile_form,name='profile_form'),
-    path('search/',views.search,name='search'),
     path('follow/<int:id>/',views.follow, name='follow'),
     path('unfollow/<int:id>/',views.unfollow, name='unfollow'),
     path('add_comment/<int:post_id>/',views.comment, name='add_comment'),
     path('like_post/<int:post_id>/',views.like, name='like_post'),
+    path('search/',views.search, name='search'),
 
 
 ]
