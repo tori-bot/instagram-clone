@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from insta_app.admin import PictureAdmin
 from .models import Picture,Profile,Comment
+from django.contrib.auth.models import User
 from .forms import CreatePost, ProfileForm,CommentForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -133,3 +134,34 @@ def search(request):
     else:
         message='Try searching for something'
         return render(request,'search.html',{'message':message})
+
+def user_profile(request,username):
+    current_user=request.user
+    user=User.objects.get(username=current_user.username)
+    selected=User.objects.get(username=username)
+    if selected==user:
+        return redirect('profile',username=current_user.username)
+
+    pictures=Picture.objects.filter(user=selected.id)
+    follows=Follow.objects.filter(follower_id=selected.id)
+    profile=Profile.get_profile_by_id(selected.id)
+    followers=Follow.objects.filter(followed=selected.id)
+
+    status=False
+    for follower in followers:
+        if user.id==follower.follower.id:
+            status=True
+            break
+        else:
+            status=False
+
+    context={
+        'user': user,
+        'selected': selected,
+        'status':status,
+        'pictures':pictures,
+        'follows':follows,
+        'followers':followers,
+        'profile':profile,
+    }
+    return render(request,'user_profile.html',context)

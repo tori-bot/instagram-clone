@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png" alt="logo">
+      <a class="navbar-brand" href="/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png" alt="logo">
       </a>
       <form class="d-flex search" action="{% url 'search' %}">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -39,7 +39,7 @@
               <li><a class="dropdown-item" href="#">Settings</a></li>
               
               <li><a class="dropdown-item" href="{% url 'django_registration_register' %} ">Switch Account</a></li><hr>
-              <li><a class="dropdown-item" href="{% url 'logout' %} ">Logout</a></li>
+              <li><a class="dropdown-item" href="/logout ">Logout</a></li>
             </ul>
           </div>
         </ul>

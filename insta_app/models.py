@@ -75,7 +75,7 @@ class Comment(models.Model):
 #         return self.follower
            
 class Profile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)   
+    user=models.OneToOneField(User,primary_key=True,on_delete=models.CASCADE)   
     profile_picture=models.ImageField(upload_to='profile_pictures/',null=True) 
     bio=models.TextField()
     
@@ -89,9 +89,6 @@ class Profile(models.Model):
     def save_profile(sender, instance, **kwargs):
         instance.profile.save()
 
-    def save_profile(self):
-        self.save()
-
     def delete_profile(self):
         self.delete()
 
@@ -101,17 +98,14 @@ class Profile(models.Model):
         self.bio=bio
         self.save()
 
-    def get_follows(self):
-        return self.follow.count()
-
     @classmethod
     def get_profile_by_id(cls,id):
-        profile=cls.objects.get(id=id)
+        profile = Profile.objects.filter(user__id = id).first()
         return profile
 
     @classmethod
     def search_profile(cls,search_term):
-        profile=cls.objects.filter(user__name__icontains=search_term) 
+        profile=cls.objects.filter(user__username__icontains=search_term).all()
         return profile
 
     def __str__(self):
