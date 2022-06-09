@@ -60,8 +60,16 @@ class Comment(models.Model):
     def delete_comment(self):
         self.delete()
 
+    @classmethod
+    def get_comments_by_pic_id(cls, id):
+        comments = Comment.objects.filter(picture__id=id)
+        return comments
+
+    class Meta:
+        ordering = ["-pk"]
+
     def __str__(self):
-            self.content
+        self.content
 
 class Follow(models.Model):
     following = models.ForeignKey(User, on_delete=models.CASCADE, null=True,related_name='following')
