@@ -73,12 +73,27 @@ i:hover{
     object-fit: cover;
     border-radius: 50%;
 }
-.tiny-pic{
-    height: 100px;
-    width: 100px;
+.tinypic{
+    height: 60px;
+    width: 60px;
     object-fit: cover;
     border-radius: 50%;
 }
 .suggest{
     position: fixed;
+}
+#comment{
+    margin: 1vh 1vw;
+    border-radius: 5px;
+  
+}
+.input-group button{
+    margin:2vh 1vw;
+}
+a{
+    text-decoration: none;
+}
+.oneuserpics{
+    height: 40vh;
+    
 }

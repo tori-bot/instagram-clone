@@ -9,46 +9,34 @@ from django.contrib.auth.models import User
 from .forms import CreatePost, ProfileForm,CommentForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-def home(request,post_id):
+def home(request):
     message=f'Hello instagram!'
     pictures=Picture.objects.all().order_by('-published')
     
-
-    current_user=request.user
-    comment_form=CommentForm()
-    if request.method == 'POST':
-
-    #     comment=request.POST.get('comment')
-    # picture=Picture.objects.get(id=pic_id)
-    # user_profile=User.objects.get(username=current_user.username)
-    # Comment.objects.create(comment=comment,
-    #      picture=picture,
-    #      user=user_profile )
-    # return redirect('view_post' ,pk=pic_id)
-
-        comment_form=CommentForm(request.POST,request.FILES)
-        if comment_form.is_valid():
-            # comment=comment_form.cleaned_data['comment']
-            single_post = Picture.objects.get(id=post_id)
-            # comment = Comment.objects.create( user=request.user, comment=comment)
-            comment= request.POST.get('comment')
-            user_profile = User.objects.get(username=current_user.username)
-            Comment.objects.create(
-            comment=comment,
-            picture = single_post,
-            user=user_profile   
-            )
-            return redirect(reverse('home'))
-        else:
-            return HttpResponse('Please fill the form correctly.')
-
     context={
         'message':message,
         'pictures':pictures,
-        'comment_form':comment_form,
-        'comments':comments,
     }
     return render(request,'index.html',context)
+
+@login_required(login_url='/accounts/login/')
+def onepic(request,pk):
+    post = Picture.objects.filter(id=pk).first()
+    print(f'\n {post} \n')
+    try:
+        comments = Comment.objects.filter(picture=post)
+        
+        print(f'\n {comments} \n')
+        
+    except Comment.DoesNotExist:  
+        comments = None
+    
+    context = {
+        'post':post,
+        "comments":comments
+        }
+    
+    return render(request,'onepic.html',context)
 
 @login_required(login_url='/accounts/login/')
 def upload_pic(request):
@@ -62,7 +50,7 @@ def upload_pic(request):
             title = upload.cleaned_data['title']
             picture = upload.cleaned_data['picture']
             caption = upload.cleaned_data['caption']
-            pic = Picture(title=title, picture=picture, caption=caption,author=current_user)
+            pic = Picture(title=title, picture=picture, caption=caption,user=current_user)
             pic.save()
             return redirect('home')
         else:
@@ -129,7 +117,7 @@ def profile(request):
     user=User.objects.get(id=current_user.id)
     profile=Profile.get_profile_by_id(user.id)
     follow = Follow.objects.filter(following_id = user.id)
-    user_pics=Picture.objects.filter(author=user.id).order_by('-published')
+    user_pics=Picture.objects.filter(user=user.id).order_by('-published')
     
 
     context={
@@ -142,16 +130,17 @@ def profile(request):
 
 @login_required
 def search(request):
-    if 'search_profile' in request.GET and request.GET["search_profile"]:
-        search_term = request.GET.get("search_profile")
+    if 'search' in request.GET and request.GET["search"]:
+        search_term = request.GET.get("search")
+        print(f'\n {search_term} \n')
         searched_profiles = Profile.search_profile(search_term)
-        print(searched_profiles)
+        # print(searched_profiles)
         message = f"{search_term}"
-        return render(request, 'instagram/search_results.html', {"message":message,"profiles": searched_profiles})
+        return render(request, 'search.html', {"message":message,"profiles": searched_profiles})
     else:
         message = "Take the chance to search for a profile"
 
-    return render(request, 'search_results.html', {'message': message})
+    return render(request, 'search.html', {'message': message})
 
     
 def user_profile(request,username):
@@ -159,16 +148,16 @@ def user_profile(request,username):
     user=User.objects.get(username=current_user.username)
     selected=User.objects.get(username=username)
     if selected==user:
-        return redirect('index',username=current_user.username)
+        return redirect('home',username=current_user.username)
 
     pictures=Picture.objects.filter(user=selected.id)
-    follows=Follow.objects.filter(follower_id=selected.id)
+    follows=Follow.objects.filter(following_id=selected.id)
     profile=Profile.get_profile_by_id(selected.id)
     followers=Follow.objects.filter(followed=selected.id)
 
     status=False
     for follower in followers:
-        if user.id==follower.follower.id:
+        if user.id==follower.following.id:
             status=True
             break
         else:
@@ -188,14 +177,14 @@ def user_profile(request,username):
 def follow(request,id):
     if request.method == 'GET':
         follow=User.objects.get(pk=id)
-        follow_user=Follow(follower=request.user, followed=follow)
+        follow_user=Follow(following=request.user, followed=follow)
         follow_user.save()
         return redirect('user_profile' ,username=follow.username)
     
 def unfollow(request,id):
     if request.method=='GET':
         unfollow=User.objects.get(pk=id)
-        unfollow_user=Follow.objects.filter(follower=request.user,followed=unfollow)
+        unfollow_user=Follow.objects.filter(following=request.user,followed=unfollow)
         unfollow_user.delete()
         return redirect('user_profile' ,username=unfollow.username)
 
@@ -206,20 +195,23 @@ def comment(request,pic_id):
         comment= request.POST.get('comment')
     post = Picture.objects.get(id=pic_id)
     user_profile = User.objects.get(username=current_user.username)
-    Comment.objects.create(
-         comment=comment,
-         post = post,
+    new_comment,created=Comment.objects.get_or_create(
+         content=comment,
+         picture = post,
          user=user_profile   
         )
-    return redirect('view_post' ,pk=pic_id)
+    new_comment.save()
+
+    return redirect('onepic' ,pk=pic_id)
 
 def like(request,pic_id):
     post = Picture.objects.get(pk=pic_id)
+    print(post.id)
     is_liked = False
     user=request.user.profile
     try:
         profile=Profile.objects.get(user=user.user)
-        print(profile)
+        # print(profile)
 
     except Profile.DoesNotExist:
         raise Http404()
@@ -229,4 +221,4 @@ def like(request,pic_id):
     else:
         post.likes.add(user.user)
         is_liked=True
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('home' ))

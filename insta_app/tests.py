@@ -5,7 +5,7 @@ import datetime as dt
 # Create your tests here.
 class PictureTestClass(TestCase):
     def setUp(self):
-        self.picture =Picture(title='image',caption='image description',published='11/2/2022',author=self.user)
+        self.picture =Picture(title='image',caption='image description',published='11/2/2022',user=self.user)
         self.picture.save_picture()
 
         self.comment =Comment(published='11/2/2022',content='image description',user=self.user)

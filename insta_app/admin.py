@@ -4,7 +4,7 @@ from .models import Profile,Picture,HashTag,Comment
 
 class PictureAdmin(admin.ModelAdmin):
     model=Picture
-    fields=['title','picture','caption','author','published','slug','hashtags','likes']
+    fields=['title','picture','caption','user','published','hashtags','likes']
 # Register your models here.
 
 admin.site.register(Profile)

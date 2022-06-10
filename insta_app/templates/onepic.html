@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{%load crispy_forms_tags %} 
+{% block content %}
+{{block.super}}
+<h1>{{post.user.username}}'s posts</h1> 
+<br>
+<div class="row">
+    <div class="col-md-7">
+        <div class="card">
+         <img src=" {{post.picture.url}} " alt="pic">
+        <div class="comments">
+
+          <div class="icons">
+            <a href="{%url 'like' post.id %}" > <i class="bi bi-heart"></i></a>
+            <a href="{%url 'onepic' post.id %}"><i class="bi bi-chat"></i></a>
+            <a href="#"><i class="bi bi-send"></i></a>
+           </div>
+
+           <img class="tinypic" src="{{post.user.profile.profile_picture.url}} " alt="tinypic"> 
+           <p>{{post.user.username}} </p>
+
+           
+
+           
+        </div>  
+        
+        
+        <p>{{post.title}} </p>
+        <p>{{post.caption}} </p>
+        <br>
+        <div class="comments">
+            <h5>Comments </h5>
+
+            <div class="comments-form">
+                <form action="{%url 'comment' post.id %}" method="POST">
+                  {%csrf_token%}
+                  <div class="input-group">
+                    <input type="text" id="comment" class="form-control " name="comment" placeholder="Add comment" />
+                    <button class="btn btn-outline-primary" type="submit">Post</button>
+                  </div>
+                </form>
+              </div>
+
+            {% for comment in comments %}
+            <img class="tinypic" src="{{comment.user.profile.profile_picture.url}} " alt="tinypic">
+            <p>{{comment.user.username}} </p>
+            
+            <br>
+            <p>{{comment.content.capitalize}} </p>
+            <hr>
+            {%empty%}
+            <h5>No comments</h5>
+            {% endfor %}
+        </div>
+
+
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

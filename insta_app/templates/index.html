@@ -2,7 +2,7 @@
 {%load crispy_forms_tags %} 
 {% block content %}
 {{block.super}}
-<h1>{{current_user.username}}</h1> </h1>
+<h1>Welcome {{user.username}}...</h1> 
 
 
 <div class="row">
@@ -11,74 +11,33 @@
 
         <div class="card index">
     <div class="top">
-        <p>{{item.author}} </p>
+      <img class="tinypic" src="{{item.user.profile.profile_picture.url}} " alt="pic"> 
+      <a href="{% url 'user_profile' item.user  %} "><p>{{item.user}} </p></a>
+      
+        
         <p><small>{{item.title}}</small> </p>
     </div>
     <img src="{{item.picture.url}}" alt="pic" class="img-responsive">
     <br>
     <div class="foot">
 
-        <a href="#" > <i class="bi bi-heart"></i></a>
+        <a href="{% url 'like' item.id %}" > <i class="bi bi-heart"></i></a>
 
         
 
-        <a href="#"><i class="bi bi-chat"></i></a>
+        <a href="{% url 'onepic' item.id %}"><i class="bi bi-chat"></i></a>
         <a href="#"><i class="bi bi-send"></i></a>
         <br>
-        <p>{{item.author}} </p>
+        <p>{{item.likes.count}} likes</p>
+        <p>{{item.user}} </p>
         <p>{{item.caption}} </p>
         <p><small>{{item.published}}</small>  </p>
         <hr>
-        <form  action="{% url 'home' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+        <a href="{%url 'onepic' item.id %} ">See comments</a>
+
         
-            {{ comment_form|crispy }}
-        
-            
-            <input type="submit" class="btn btn-success" value="Post">
-          </form>
     </div>
 
-    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{item.id}} ">
-  View
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal{{item.id}}" tabindex="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{{item.title}}</h5>
-          
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="image">
-            <img src="{{item.picture.url}}" alt="pic" class="img-responsive">
-          </div>
-          <div class="foot">
-
-            <a href="#" > <i class="bi bi-heart"></i></a>
-    
-            
-    
-            <a href="#"><i class="bi bi-chat"></i></a>
-            <a href="#"><i class="bi bi-send"></i></a>
-            <p><small>{{item.author}}</small>  </p>
-            
-            <p>{{item.caption}} </p>
-            <p><small>{{item.published}}</small>  </p>
-        </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Comment</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          
-        </div>
-      </div>
-    </div>
-  </div>
   
 
 </div>
@@ -99,7 +58,7 @@
 
 
 <div class="footer">
-    <a>tori-bot   c 2022   Victoria Makena</a>
+    <a>tori-bot   &copy 2022   Victoria Makena</a>
 
 </div>
 {% endblock %}

@@ -14,9 +14,10 @@ class Picture(models.Model):
     title = models.CharField(max_length=50)
     picture=models.ImageField(upload_to='pictures/')
     caption=models.TextField()
-    author=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
     published=models.DateTimeField(auto_now_add=True)
     hashtags=models.ManyToManyField(HashTag)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True, )
     
     def save_picture(self):
         self.save()
@@ -24,11 +25,11 @@ class Picture(models.Model):
     def delete_picture(self):
         self.delete()
 
-    def update_picture(self,title,picture,caption,author,published,hashtag):
+    def update_picture(self,title,picture,caption,user,published,hashtag):
         self.title=title
         self.picture=picture
         self.caption=caption
-        self.author=author
+        self.user=user
         self.published=published
         self.hashtag=hashtag
         self.save()
@@ -44,7 +45,7 @@ class Picture(models.Model):
         return images
 
     def __str__(self):
-        self.name
+        return self.title
 
 
 class Comment(models.Model):
@@ -52,7 +53,7 @@ class Comment(models.Model):
     content=models.TextField()
     published=models.DateTimeField(auto_now_add=True)
     picture=models.ForeignKey(Picture, on_delete=models.CASCADE,default=0)
-    parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True)
+    parent_comment=models.ForeignKey('self',on_delete=models.CASCADE,null=True,blank=True)
 
     def save_comment(self):
         self.save()
@@ -69,7 +70,7 @@ class Comment(models.Model):
         ordering = ["-pk"]
 
     def __str__(self):
-        self.content
+        return self.content
 
 class Follow(models.Model):
     following = models.ForeignKey(User, on_delete=models.CASCADE, null=True,related_name='following')
